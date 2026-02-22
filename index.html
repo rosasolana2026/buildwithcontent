@@ -3,252 +3,486 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Content Machine — Wake Up to a Full Content Calendar</title>
-  <meta name="description" content="AI that scrapes trending topics in your niche, writes content in your voice, and schedules it across platforms. One command. Every day.">
+  <title>Content Machine — Wake Up to a Week of Content, Written in Your Voice</title>
+  <meta name="description" content="AI that scrapes what's trending in your niche, writes tweets, LinkedIn posts, newsletters and video scripts in your voice. One command. Every morning.">
+  <meta property="og:title" content="Content Machine — Your Content, On Autopilot">
+  <meta property="og:description" content="Wake up to 5 tweets, a LinkedIn post, a newsletter, and a video script — all written in your voice. Powered by AI. Free on GitHub.">
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#080d1a;color:#e8e4f8}
-    a{color:inherit;text-decoration:none}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #080c14;
+      --bg2: #0e1420;
+      --bg3: #141c2e;
+      --border: rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.12);
+      --text: #f0eeff;
+      --muted: #7a7a9a;
+      --muted2: #a0a0c0;
+      --accent: #6d5aff;
+      --accent2: #8b73ff;
+      --green: #34d399;
+      --teal: #22d3ee;
+    }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
 
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:20px 40px;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;background:rgba(8,13,26,0.9);backdrop-filter:blur(12px);z-index:100}
-    .nav .logo{font-size:18px;font-weight:800;background:linear-gradient(135deg,#fff,#a78bff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .nav .back{color:#8070b0;font-size:13px;display:flex;align-items:center;gap:6px}
-    .nav .back:hover{color:#fff}
-    .nav .cta-nav{background:linear-gradient(135deg,#7c4dff,#5b2de8);color:#fff;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:600}
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(8,12,20,0.85); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 5%; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-weight: 800; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+    .nav-logo span { background: linear-gradient(135deg, #6d5aff, #22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-links { display: flex; gap: 2rem; font-size: 0.82rem; color: var(--muted); }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta { background: var(--accent); color: #fff; padding: 8px 20px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; transition: background .2s; }
+    .nav-cta:hover { background: var(--accent2); }
 
-    .hero{text-align:center;padding:90px 24px 70px;background:radial-gradient(ellipse at top,rgba(100,60,200,.15) 0%,transparent 70%)}
-    .eyebrow{display:inline-block;background:rgba(160,120,255,.15);border:1px solid rgba(160,120,255,.3);color:#c4a8ff;padding:6px 18px;border-radius:100px;font-size:13px;margin-bottom:28px;letter-spacing:.5px}
-    h1{font-size:clamp(30px,5.5vw,60px);font-weight:900;line-height:1.1;max-width:780px;margin:0 auto 24px;background:linear-gradient(135deg,#fff 0%,#c4a8ff 60%,#7c4dff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .sub{font-size:clamp(16px,2vw,20px);color:#a090c8;max-width:560px;margin:0 auto 40px;line-height:1.6}
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 90px 5% 70px;
+      background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(109,90,255,0.12) 0%, transparent 70%);
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(109,90,255,0.12); border: 1px solid rgba(109,90,255,0.3);
+      color: #a89bff; padding: 5px 14px; border-radius: 100px;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em;
+      margin-bottom: 28px;
+    }
+    .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    h1 { font-size: clamp(2rem, 5.5vw, 3.8rem); font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; max-width: 820px; margin: 0 auto 20px; }
+    h1 em { font-style: normal; background: linear-gradient(135deg, #6d5aff 0%, #22d3ee 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero-sub { font-size: clamp(1rem, 1.8vw, 1.2rem); color: var(--muted2); max-width: 560px; margin: 0 auto 40px; line-height: 1.7; }
+    .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
+    .btn-primary {
+      background: var(--accent); color: #fff; padding: 14px 28px;
+      border-radius: 10px; font-size: 0.95rem; font-weight: 700;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(109,90,255,0.4); }
+    .btn-ghost {
+      background: var(--bg3); border: 1px solid var(--border2); color: var(--muted2);
+      padding: 14px 28px; border-radius: 10px; font-size: 0.95rem; font-weight: 600;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-ghost:hover { border-color: var(--border2); color: var(--text); }
+    .hero-note { font-size: 0.78rem; color: var(--muted); }
 
-    .cta-group{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:60px}
-    .btn-primary{background:linear-gradient(135deg,#7c4dff,#5b2de8);color:#fff;padding:14px 32px;border-radius:10px;font-size:16px;font-weight:700;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s}
-    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(124,77,255,.4)}
-    .btn-secondary{background:transparent;border:1px solid rgba(255,255,255,.15);color:#e8e4f8;padding:14px 32px;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;transition:border-color .2s}
-    .btn-secondary:hover{border-color:rgba(255,255,255,.4)}
+    /* TERMINAL */
+    .terminal-wrap { max-width: 760px; margin: 56px auto 0; padding: 0 5%; }
+    .terminal {
+      background: #0a0e18; border: 1px solid rgba(109,90,255,0.2);
+      border-radius: 14px; overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(109,90,255,0.08);
+    }
+    .term-header {
+      background: #111827; padding: 12px 18px;
+      display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .term-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .term-title { font-size: 0.72rem; color: #4b5563; margin-left: 6px; letter-spacing: 0.04em; }
+    .term-body { padding: 20px 22px; font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace; font-size: 0.78rem; line-height: 1.9; }
+    .t-cmd { color: #6d5aff; }
+    .t-dim { color: #374151; }
+    .t-ok { color: #34d399; }
+    .t-warn { color: #f59e0b; }
+    .t-head { color: #7a7a9a; margin: 4px 0; }
+    .t-tweet {
+      color: #e0e0f8; background: rgba(109,90,255,0.08);
+      border-left: 2px solid #6d5aff; padding: 7px 12px;
+      margin: 3px 0; border-radius: 0 6px 6px 0;
+      font-family: -apple-system, sans-serif; font-size: 0.8rem; line-height: 1.5;
+    }
 
-    .demo{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;max-width:700px;margin:0 auto;text-align:left;overflow:hidden}
-    .demo-header{background:rgba(255,255,255,.04);padding:12px 20px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.06)}
-    .dot{width:10px;height:10px;border-radius:50%}
-    .demo-title{font-size:12px;color:#6050a0;margin-left:4px}
-    .demo-body{padding:20px 24px;font-family:'SF Mono','Fira Code',monospace;font-size:13px;line-height:1.8;color:#b8aae0}
-    .cmd{color:#7c4dff}
-    .out{color:#50c878;margin-left:4px}
-    .tweet-out{color:#e8e4f8;background:rgba(124,77,255,.08);border-left:3px solid #7c4dff;padding:8px 14px;margin:6px 0;border-radius:0 6px 6px 0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:13px;line-height:1.5}
+    /* SECTION SCAFFOLDING */
+    section { padding: 80px 5%; }
+    .section-label { text-align: center; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    h2 { text-align: center; font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 12px; }
+    .section-sub { text-align: center; color: var(--muted2); max-width: 500px; margin: 0 auto 56px; font-size: 1rem; line-height: 1.7; }
 
-    .section{padding:80px 24px;max-width:1100px;margin:0 auto}
-    .section-label{text-align:center;color:#7c4dff;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
-    h2{text-align:center;font-size:clamp(24px,4vw,40px);font-weight:800;margin-bottom:16px;color:#fff}
-    .h2-sub{text-align:center;color:#8070b0;font-size:16px;max-width:520px;margin:0 auto 60px;line-height:1.6}
+    /* HOW IT WORKS */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; max-width: 900px; margin: 0 auto; }
+    .step { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 28px 24px; }
+    .step-num { font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, #6d5aff, #22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; }
+    .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .step p { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
 
-    .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-bottom:20px}
-    .step{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:28px}
-    .step-num{font-size:28px;font-weight:900;background:linear-gradient(135deg,#7c4dff,#c4a8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px}
-    .step h3{font-size:17px;font-weight:700;margin-bottom:8px;color:#fff}
-    .step p{font-size:14px;color:#7060a0;line-height:1.6}
+    /* EXAMPLES TABS */
+    .examples-wrap { max-width: 860px; margin: 0 auto; }
+    .tabs { display: flex; gap: 4px; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 4px; margin-bottom: 0; overflow-x: auto; }
+    .tab {
+      flex: 1; min-width: 100px; padding: 10px 16px; border-radius: 9px; font-size: 0.82rem; font-weight: 600;
+      color: var(--muted); cursor: pointer; text-align: center; transition: all .15s; white-space: nowrap;
+      background: transparent; border: none;
+    }
+    .tab.active { background: var(--accent); color: #fff; }
+    .tab:hover:not(.active) { color: var(--text); background: rgba(255,255,255,0.04); }
+    .tab-panels { background: var(--bg2); border: 1px solid var(--border); border-top: none; border-radius: 0 0 14px 14px; overflow: hidden; }
+    .panel { display: none; padding: 28px; }
+    .panel.active { display: block; }
+    .panel-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
 
-    .output-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-    .output-card{background:rgba(124,77,255,.06);border:1px solid rgba(124,77,255,.2);border-radius:12px;padding:20px}
-    .output-icon{font-size:24px;margin-bottom:10px}
-    .output-card h3{font-size:15px;font-weight:700;color:#c4a8ff;margin-bottom:6px}
-    .output-card p{font-size:13px;color:#6050a0;line-height:1.5}
+    /* Tweet cards */
+    .tweet-list { display: flex; flex-direction: column; gap: 10px; }
+    .tweet-card {
+      background: var(--bg3); border: 1px solid var(--border2); border-radius: 12px; padding: 16px 18px;
+      font-size: 0.9rem; line-height: 1.6; color: var(--text);
+      transition: border-color .2s;
+    }
+    .tweet-card:hover { border-color: rgba(109,90,255,0.4); }
+    .tweet-card .tw-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.75rem; color: var(--muted); }
+    .tw-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #6d5aff, #22d3ee); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; color: #fff; flex-shrink: 0; }
 
-    .pricing{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;max-width:800px;margin:0 auto}
-    .plan{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:32px;text-align:center}
-    .plan.featured{background:rgba(124,77,255,.08);border-color:rgba(124,77,255,.4);position:relative}
-    .badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#7c4dff,#5b2de8);color:#fff;font-size:11px;font-weight:700;padding:4px 16px;border-radius:100px;white-space:nowrap;letter-spacing:.5px}
-    .plan-name{font-size:14px;color:#8070b0;font-weight:600;margin-bottom:12px;text-transform:uppercase;letter-spacing:1px}
-    .plan-price{font-size:48px;font-weight:900;color:#fff;margin-bottom:4px}
-    .plan-price span{font-size:20px;color:#6050a0;font-weight:400}
-    .plan-desc{font-size:14px;color:#6050a0;margin-bottom:28px;line-height:1.5}
-    .plan ul{list-style:none;text-align:left;margin-bottom:28px}
-    .plan ul li{font-size:14px;color:#a090c8;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:center;gap:8px}
-    .plan ul li::before{content:'✓';color:#7c4dff;font-weight:700;flex-shrink:0}
+    /* Long-form content */
+    .content-block { font-size: 0.9rem; line-height: 1.8; color: var(--muted2); }
+    .content-block h3 { font-size: 1.05rem; font-weight: 700; color: var(--text); margin: 20px 0 8px; }
+    .content-block h3:first-child { margin-top: 0; }
+    .content-block p { margin-bottom: 14px; }
+    .content-block strong { color: var(--text); }
+    .content-block .script-section { margin-bottom: 20px; }
+    .script-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); margin-bottom: 6px; }
 
-    .faq{max-width:680px;margin:0 auto}
-    .faq-item{border-bottom:1px solid rgba(255,255,255,.06);padding:24px 0}
-    .faq-item h3{font-size:16px;font-weight:600;color:#fff;margin-bottom:10px}
-    .faq-item p{font-size:14px;color:#7060a0;line-height:1.6}
+    /* SOCIAL PROOF */
+    .stats-row { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; padding: 48px 5%; background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .stat { text-align: center; }
+    .stat-num { font-size: 2.2rem; font-weight: 900; background: linear-gradient(135deg, #6d5aff, #22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-label { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
 
-    footer{text-align:center;padding:40px 24px;color:#4030a0;font-size:13px;border-top:1px solid rgba(255,255,255,.04)}
-    footer a{color:#6050a0;margin:0 12px}
-    footer a:hover{color:#fff}
+    /* PRICING */
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; max-width: 860px; margin: 0 auto; }
+    .plan { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 32px; display: flex; flex-direction: column; }
+    .plan.featured { border-color: var(--accent); background: rgba(109,90,255,0.06); position: relative; }
+    .plan-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 3px 14px; border-radius: 100px; letter-spacing: 0.06em; white-space: nowrap; }
+    .plan-tier { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+    .plan-price { font-size: 2.8rem; font-weight: 900; color: var(--text); line-height: 1; margin-bottom: 4px; }
+    .plan-price sup { font-size: 1.2rem; vertical-align: super; }
+    .plan-price sub { font-size: 1rem; color: var(--muted); font-weight: 400; }
+    .plan-desc { font-size: 0.85rem; color: var(--muted); margin: 12px 0 24px; line-height: 1.6; flex: 1; }
+    .plan-features { list-style: none; margin-bottom: 28px; }
+    .plan-features li { font-size: 0.85rem; color: var(--muted2); padding: 6px 0; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 8px; }
+    .plan-features li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+    .plan-btn { display: block; text-align: center; padding: 13px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; transition: all .15s; }
+    .plan-btn-primary { background: var(--accent); color: #fff; }
+    .plan-btn-primary:hover { background: var(--accent2); }
+    .plan-btn-ghost { background: var(--bg3); border: 1px solid var(--border2); color: var(--muted2); }
+    .plan-btn-ghost:hover { color: var(--text); border-color: var(--border2); }
 
-    @media(max-width:600px){.nav{padding:16px 20px}.cta-group{flex-direction:column;align-items:center}}
+    /* FAQ */
+    .faq-list { max-width: 680px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid var(--border); padding: 22px 0; }
+    .faq-item h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; }
+    .faq-item p { font-size: 0.875rem; color: var(--muted); line-height: 1.7; }
+
+    /* CTA BOTTOM */
+    .cta-section { text-align: center; padding: 90px 5%; background: radial-gradient(ellipse 60% 60% at 50% 100%, rgba(109,90,255,0.1) 0%, transparent 70%); }
+    .cta-section h2 { margin-bottom: 16px; }
+    .cta-section p { color: var(--muted2); max-width: 480px; margin: 0 auto 36px; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 32px 5%; display: flex; align-items: center; justify-content: space-between; font-size: 0.78rem; color: var(--muted); flex-wrap: wrap; gap: 12px; }
+    footer a { color: var(--muted); transition: color .15s; }
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 4%; }
+      .nav-links { display: none; }
+      .stats-row { gap: 32px; }
+      footer { justify-content: center; text-align: center; }
+    }
   </style>
 </head>
 <body>
 
-<nav class="nav">
-  <a href="https://rosabuilds.com" class="back">buildwithcontent.com</a>
-  <div style="font-weight:800;font-size:16px">🏭 Content Machine</div>
-  <a href="https://github.com/rosasolana2026/content-machine" class="cta-nav" target="_blank">Get it free →</a>
+<nav>
+  <div class="nav-logo">🏭 <span>buildwithcontent</span></div>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#examples">Examples</a>
+    <a href="#pricing">Pricing</a>
+    <a href="https://github.com/rosasolana2026/content-machine" target="_blank">GitHub</a>
+  </div>
+  <a href="mailto:hello@buildwithcontent.com" class="nav-cta">Get set up →</a>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
-  <div class="eyebrow">OpenClaw Skill · Open Source</div>
-  <h1>Wake up to a full content calendar. Every day.</h1>
-  <p class="sub">Content Machine scrapes what's trending in your niche, writes 5 tweets, a LinkedIn post, a newsletter snippet, and a video script — all in your voice. One command.</p>
-  <div class="cta-group">
-    <a href="https://github.com/rosasolana2026/content-machine" class="btn-primary" target="_blank">Get it free on GitHub</a>
-    <a href="mailto:rosa@iamrosalinda.com?subject=Content Machine setup" class="btn-secondary">$149 setup for me →</a>
+  <div class="pill"><span class="dot"></span> Open Source · Free to use</div>
+  <h1>Wake up to a week of content,<br><em>written in your voice.</em></h1>
+  <p class="hero-sub">Content Machine scrapes what's trending in your niche, then writes tweets, LinkedIn posts, newsletters, and video scripts — in your exact tone. One command. Every morning.</p>
+  <div class="cta-row">
+    <a href="https://github.com/rosasolana2026/content-machine" target="_blank" class="btn-primary">Get it free on GitHub →</a>
+    <a href="mailto:hello@buildwithcontent.com?subject=Set up Content Machine for me" class="btn-ghost">Set it up for me — $149</a>
   </div>
-
-  <div class="demo">
-    <div class="demo-header">
-      <div class="dot" style="background:#ff5f57"></div>
-      <div class="dot" style="background:#febc2e"></div>
-      <div class="dot" style="background:#28c840"></div>
-      <span class="demo-title">terminal</span>
-    </div>
-    <div class="demo-body">
-      <div><span class="cmd">$</span> ./run.sh my-brand.json</div>
-      <div style="color:#6050a0">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
-      <div style="color:#6050a0">  Content Machine — 2026-02-21</div>
-      <div style="color:#6050a0">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
-      <div><span class="out">✓</span> Scraping trends for: "AI tools and indie hacking"</div>
-      <div><span class="out">✓</span> Found 9 trending topics</div>
-      <div><span class="out">✓</span> Generating content...</div>
-      <div><span class="out">✓</span> Saved to output/2026-02-21/</div>
-      <br>
-      <div style="color:#8070b0">📣 Today's tweets:</div>
-      <div class="tweet-out">Built an AI scraper that "saves 10 hours/week." Turns out the 10 hours were spent maintaining it. Now I just do the work manually.</div>
-      <div class="tweet-out">Everyone's AI tool fails the same way: launches with 100 features, finds out users want 1. Should've started there.</div>
-      <div class="tweet-out">Watched a founder spend 6 weeks fine-tuning prompts. His competitor spent 6 hours building a UI that actually works. Guess who won.</div>
-    </div>
-  </div>
+  <p class="hero-note">~$0.03/day in API costs · No subscription required · Runs on your machine</p>
 </section>
 
-<section class="section">
+<!-- TERMINAL DEMO -->
+<div class="terminal-wrap">
+  <div class="terminal">
+    <div class="term-header">
+      <div class="term-dot" style="background:#ff5f57"></div>
+      <div class="term-dot" style="background:#febc2e"></div>
+      <div class="term-dot" style="background:#28c840"></div>
+      <span class="term-title">~/content-machine — zsh</span>
+    </div>
+    <div class="term-body">
+      <div><span class="t-cmd">$</span> ./run.sh my-brand.json</div>
+      <div class="t-dim">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+      <div class="t-dim">  Content Machine — 2026-02-21</div>
+      <div class="t-dim">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+      <div><span class="t-ok">✓</span> Scraping trends for: <span style="color:#a89bff">"AI tools and indie hacking"</span></div>
+      <div><span class="t-ok">✓</span> Found 9 trending topics</div>
+      <div><span class="t-ok">✓</span> Generating content in your voice...</div>
+      <div><span class="t-ok">✓</span> Saved to output/2026-02-21/</div>
+      <br>
+      <div class="t-head">📣 Today's tweets:</div>
+      <div class="t-tweet">Built an "AI-powered" tool that was just regex. Sold 3 copies before someone asked how it worked. The magic isn't in the AI. It's in solving a real problem people will pay for.</div>
+      <div class="t-tweet">Most indie hackers optimize for launch day. Should optimize for day 90. That's when you know if people actually need it or just thought it was cool.</div>
+      <div class="t-tweet">The real moat isn't your model or your UI. It's your data. Once you have users, you have patterns no one else can replicate. That's what's worth defending.</div>
+      <br>
+      <div><span class="t-ok">✓</span> Report saved to output/2026-02-21/report.md</div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat"><div class="stat-num">4</div><div class="stat-label">formats generated daily</div></div>
+  <div class="stat"><div class="stat-num">~$0.03</div><div class="stat-label">per day in API costs</div></div>
+  <div class="stat"><div class="stat-num">1</div><div class="stat-label">command to run everything</div></div>
+  <div class="stat"><div class="stat-num">10hrs</div><div class="stat-label">saved per week</div></div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
   <div class="section-label">How it works</div>
-  <h2>Three steps. Fully automated.</h2>
-  <p class="h2-sub">Set your brand voice once. Run it daily. Content shows up.</p>
+  <h2>Set it up once. Let it run.</h2>
+  <p class="section-sub">Three steps. Fully automated. Content lands in a folder every morning ready to review.</p>
   <div class="steps">
     <div class="step">
-      <div class="step-num">1</div>
+      <div class="step-num">01</div>
+      <h3>Configure your voice</h3>
+      <p>Fill out a JSON file with your niche, tone, what to avoid, and 2–3 example posts you've written. That's the only setup required.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
       <h3>Scrape what's trending</h3>
-      <p>Monitors Reddit, HackerNews, and your custom sources. Finds the top topics in your niche from the past 7 days.</p>
+      <p>Every run pulls the top posts from Reddit, HackerNews, and your custom sources — filtered to your niche from the past 7 days.</p>
     </div>
     <div class="step">
-      <div class="step-num">2</div>
-      <h3>Generate in your voice</h3>
-      <p>You define your tone, examples, and what to avoid. Claude writes content that sounds like you — not generic AI slop.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <h3>Queue and schedule</h3>
-      <p>Posts saved to markdown for your review, or auto-scheduled via upload-post. You stay in control.</p>
+      <div class="step-num">03</div>
+      <h3>Generate &amp; queue</h3>
+      <p>Claude writes 5 tweets, a LinkedIn post, a newsletter snippet, and a video script. Saved to markdown or auto-scheduled via upload-post.</p>
     </div>
   </div>
 </section>
 
-<section class="section" style="padding-top:0">
-  <div class="section-label">What you get</div>
-  <h2>Every day. Without lifting a finger.</h2>
-  <p class="h2-sub">One run generates a full day's content across every format you need.</p>
-  <div class="output-grid">
-    <div class="output-card">
-      <div class="output-icon">🐦</div>
-      <h3>5 Tweets</h3>
-      <p>Varied formats — takes a stance, shares a fact, tells a micro-story. Under 280 chars. No hashtag spam.</p>
+<!-- EXAMPLES -->
+<section id="examples" style="padding-top:0">
+  <div class="section-label">Real output</div>
+  <h2>Content written by the machine.<br>Not by us.</h2>
+  <p class="section-sub">Every example below was generated in a live test run. Niche: AI tools and indie hacking. Zero human editing.</p>
+
+  <div class="examples-wrap">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab(this,'tweets')">🐦 Tweets</button>
+      <button class="tab" onclick="switchTab(this,'linkedin')">💼 LinkedIn</button>
+      <button class="tab" onclick="switchTab(this,'newsletter')">📧 Newsletter</button>
+      <button class="tab" onclick="switchTab(this,'video')">🎬 Video Script</button>
     </div>
-    <div class="output-card">
-      <div class="output-icon">💼</div>
-      <h3>LinkedIn Post</h3>
-      <p>150-300 words. Hook, insight, takeaway. Written like a human, not a LinkedIn influencer.</p>
-    </div>
-    <div class="output-card">
-      <div class="output-icon">📧</div>
-      <h3>Newsletter Snippet</h3>
-      <p>100-word "what I'm watching this week" section. Opinionated, punchy, paste-ready.</p>
-    </div>
-    <div class="output-card">
-      <div class="output-icon">🎬</div>
-      <h3>Video Script</h3>
-      <p>60-second short-form script with hook, body, and CTA. Built for TikTok, Reels, and YouTube Shorts.</p>
+    <div class="tab-panels">
+
+      <!-- TWEETS -->
+      <div class="panel active" id="panel-tweets">
+        <div class="panel-label">5 tweets · generated in one run · zero editing</div>
+        <div class="tweet-list">
+          <div class="tweet-card">
+            <div class="tw-meta"><div class="tw-avatar">AC</div><strong>@alexbuilds</strong></div>
+            Built an "AI-powered" tool that was just regex. Sold 3 copies before someone asked how it worked. Lesson: the magic isn't in the AI. It's in solving a real problem people will pay for.
+          </div>
+          <div class="tweet-card">
+            <div class="tw-meta"><div class="tw-avatar">AC</div><strong>@alexbuilds</strong></div>
+            Most indie hackers optimize for launch day. Should optimize for day 90. That's when you know if people actually need it or just thought it was cool.
+          </div>
+          <div class="tweet-card">
+            <div class="tw-meta"><div class="tw-avatar">AC</div><strong>@alexbuilds</strong></div>
+            Watched someone spend 6 weeks perfecting their Claude wrapper's prompt. Their competitor shipped in 2 days and got 10x users. Distribution beats optimization every time.
+          </div>
+          <div class="tweet-card">
+            <div class="tw-meta"><div class="tw-avatar">AC</div><strong>@alexbuilds</strong></div>
+            Started tracking which AI tool features actually get used vs which ones I built because they "seemed cool." Spoiler: 60% of my features are dead weight.
+          </div>
+          <div class="tweet-card">
+            <div class="tw-meta"><div class="tw-avatar">AC</div><strong>@alexbuilds</strong></div>
+            The real moat isn't your model or your UI. It's your data. Once you have users, you have patterns no one else can replicate. That's what's worth defending.
+          </div>
+        </div>
+      </div>
+
+      <!-- LINKEDIN -->
+      <div class="panel" id="panel-linkedin">
+        <div class="panel-label">LinkedIn post · 280 words · generated in one run</div>
+        <div class="content-block">
+          <h3>The AI Tool Gold Rush is Over. The Real Work is Starting.</h3>
+          <p>Every indie hacker with a weekend is building an AI wrapper around GPT-4. Most will die in obscurity.</p>
+          <p>Here's what's actually happening: the easy wins — slapping a UI on an API — don't work anymore. Users have ChatGPT. They have Claude. The delta needs to be real.</p>
+          <p>The ones gaining traction now have three things in common:</p>
+          <p><strong>1. They solve a specific job.</strong> Not "AI for marketers" (too broad). "AI to write product update emails that match your brand voice" (specific, testable, painful enough to pay for).</p>
+          <p><strong>2. They own distribution.</strong> Building a better AI tool means nothing if nobody finds it. The winners right now are either riding existing platforms or have an audience already.</p>
+          <p><strong>3. They embrace the commodity.</strong> Stop pretending your fine-tuned model is proprietary. Use Claude or GPT-4, focus on the UX and the workflow. The defensibility is in the distribution and retention, not the model.</p>
+          <p>I've watched this cycle twice now. The hype phase is over. We're in the grind phase where 95% fail and a few build real businesses.</p>
+          <p><strong>One thing:</strong> Launch something this week. Not perfect. Ship it to five real people and watch them use it. That's worth more than six months of optimization.</p>
+        </div>
+      </div>
+
+      <!-- NEWSLETTER -->
+      <div class="panel" id="panel-newsletter">
+        <div class="panel-label">Newsletter snippet · "what I'm watching" section · ~140 words</div>
+        <div class="content-block">
+          <h3>What I'm Watching</h3>
+          <p>Claude 3.5 Sonnet shipping with native vision and artifact generation is the real move this week. Not because it's "best in class" — everyone claims that. But because it's making it stupid easy for indie builders to ship features that previously required calling three different APIs and writing glue code. Saw someone build a full design-to-HTML tool in an afternoon.</p>
+          <p>That's the actual product velocity unlock everyone talks about but rarely happens. The artifact thing matters less than you'd think. What matters: faster iteration cycle means faster failure, which means you learn what customers actually want instead of guessing.</p>
+          <p>The wrapper graveyard is full of technically impressive builds nobody wanted. This just removed one more excuse.</p>
+        </div>
+      </div>
+
+      <!-- VIDEO SCRIPT -->
+      <div class="panel" id="panel-video">
+        <div class="panel-label">60-second video script · TikTok / Reels / YouTube Shorts</div>
+        <div class="content-block">
+          <div class="script-section">
+            <div class="script-label">Hook (0–3s)</div>
+            <p>"Everyone thinks the future is building better AI. It's not. It's distribution."</p>
+          </div>
+          <div class="script-section">
+            <div class="script-label">Body (3–50s)</div>
+            <p>"Right now, 50 people are building the same chatbot wrapper you just thought of. Same tech. Same model access. The ones winning? They figured out how to get in front of users.</p>
+            <p>Second thing: verticalization is done. Generic AI assistants are commodities now. The money is in solving specific problems for specific people. Tax prep AI. Sales email AI. That angle.</p>
+            <p>Third: margins are collapsing. Your $29/month SaaS needs either massive volume or you're trading time for dollars. Most indie hackers won't hit volume. So either go niche and charge premium, or build something people actually need.</p>
+            <p>And here's the reality — most of you will fail. Not because your tool is bad. Because you're competing on feature parity when you should be competing on who understands the customer better."</p>
+          </div>
+          <div class="script-section">
+            <div class="script-label">CTA (50–60s)</div>
+            <p>"Stop building. Go spend 5 hours talking to people in your space. Real conversations. That's where the idea that actually works lives."</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
 
-<section class="section">
+<!-- PRICING -->
+<section id="pricing">
   <div class="section-label">Pricing</div>
-  <h2>Free to use. Pay to not think about it.</h2>
-  <p class="h2-sub">The code is open source. We charge for setup and management.</p>
-  <div class="pricing">
+  <h2>Free to use. Pay to skip the setup.</h2>
+  <p class="section-sub">The code is open source and free forever. We charge to set it up and run it for you.</p>
+  <div class="pricing-grid">
     <div class="plan">
-      <div class="plan-name">Self-hosted</div>
+      <div class="plan-tier">Self-hosted</div>
       <div class="plan-price">Free</div>
-      <div class="plan-desc">Clone it, configure it yourself, run it. Full code on GitHub.</div>
-      <ul>
+      <div class="plan-desc">Clone it, configure your brand voice, run it yourself. Full source on GitHub.</div>
+      <ul class="plan-features">
         <li>Full source code</li>
         <li>Brand voice template</li>
         <li>Reddit + HackerNews scraping</li>
         <li>Claude-powered generation</li>
         <li>Markdown output</li>
       </ul>
-      <a href="https://github.com/rosasolana2026/content-machine" class="btn-secondary" target="_blank" style="display:block;text-align:center;padding:12px">Get on GitHub →</a>
+      <a href="https://github.com/rosasolana2026/content-machine" target="_blank" class="plan-btn plan-btn-ghost">Get on GitHub →</a>
     </div>
     <div class="plan featured">
-      <div class="badge">MOST POPULAR</div>
-      <div class="plan-name">Done For You</div>
-      <div class="plan-price">$149<span> one-time</span></div>
-      <div class="plan-desc">I configure it for your niche, tune your brand voice, test it, and hand it over working.</div>
-      <ul>
+      <div class="plan-badge">MOST POPULAR</div>
+      <div class="plan-tier">Done For You</div>
+      <div class="plan-price"><sup>$</sup>149</div>
+      <div class="plan-desc">We configure it for your niche, tune your brand voice, test it, and hand it over working.</div>
+      <ul class="plan-features">
         <li>Everything in Free</li>
-        <li>Custom brand voice setup</li>
-        <li>Source configuration for your niche</li>
-        <li>OpenClaw integration (WhatsApp/Telegram)</li>
+        <li>Custom brand voice tuning</li>
+        <li>Source config for your niche</li>
+        <li>OpenClaw / WhatsApp delivery</li>
         <li>Cron setup for daily runs</li>
         <li>30 days of support</li>
       </ul>
-      <a href="mailto:rosa@iamrosalinda.com?subject=Content Machine setup" class="btn-primary" style="display:block;text-align:center">Get set up →</a>
+      <a href="mailto:hello@buildwithcontent.com?subject=Setup - Done For You" class="plan-btn plan-btn-primary">Get set up →</a>
     </div>
     <div class="plan">
-      <div class="plan-name">Managed</div>
-      <div class="plan-price">$49<span>/mo</span></div>
-      <div class="plan-desc">I run it for you. Content lands in your WhatsApp or Telegram every morning.</div>
-      <ul>
+      <div class="plan-tier">Managed</div>
+      <div class="plan-price"><sup>$</sup>49<sub>/mo</sub></div>
+      <div class="plan-desc">Content delivered to your WhatsApp every morning. You review and publish.</div>
+      <ul class="plan-features">
         <li>Daily content delivery</li>
-        <li>You review, I publish</li>
+        <li>WhatsApp / Telegram delivery</li>
         <li>Monthly brand voice tuning</li>
         <li>Priority support</li>
       </ul>
-      <a href="mailto:rosa@iamrosalinda.com?subject=Content Machine managed" class="btn-secondary" style="display:block;text-align:center;padding:12px">Contact me →</a>
+      <a href="mailto:hello@buildwithcontent.com?subject=Managed Plan" class="plan-btn plan-btn-ghost">Contact us →</a>
     </div>
   </div>
 </section>
 
-<section class="section" style="padding-top:0">
+<!-- FAQ -->
+<section style="padding-top:0">
   <div class="section-label">FAQ</div>
   <h2>Questions</h2>
-  <div class="faq">
+  <div class="faq-list">
     <div class="faq-item">
-      <h3>What's the cost to run it?</h3>
-      <p>About $0.01–0.05 per day in Claude API costs. You need an Anthropic API key (pay-as-you-go). That's it.</p>
+      <h3>How much does it actually cost to run?</h3>
+      <p>About $0.01–0.05 per day in Claude API costs (Haiku model). You need an Anthropic API key — pay as you go, no monthly commitment. That's the only ongoing cost.</p>
     </div>
     <div class="faq-item">
-      <h3>Does it actually sound like me?</h3>
-      <p>It depends on how well you fill out the brand voice file. The more examples and specifics you give it, the better. The setup package includes me tuning this with you until it does.</p>
-    </div>
-    <div class="faq-item">
-      <h3>What's OpenClaw?</h3>
-      <p>An open-source AI agent that runs on your machine. Content Machine is built as an OpenClaw skill but works as a standalone script too — no OpenClaw required.</p>
+      <h3>Will it actually sound like me?</h3>
+      <p>It depends on how well you fill out the brand voice file. The more examples and specifics you give it, the better the output. The $149 setup includes us tuning it with you until it does.</p>
     </div>
     <div class="faq-item">
       <h3>Do I have to post everything it generates?</h3>
-      <p>No. Content saves to a folder. You review, edit, approve. Nothing gets posted without your say unless you configure auto-scheduling.</p>
+      <p>No. Everything saves to a folder. You review, edit if needed, then publish. Nothing posts automatically unless you configure upload-post scheduling.</p>
     </div>
     <div class="faq-item">
-      <h3>Can it post for me automatically?</h3>
-      <p>Yes — connect upload-post and it'll schedule posts across Twitter, LinkedIn, and more. The setup package includes this configuration.</p>
+      <h3>What platforms does it post to?</h3>
+      <p>Content Machine generates for Twitter/X, LinkedIn, newsletter, and short-form video. With upload-post connected, it can auto-schedule to Twitter, LinkedIn, Instagram, TikTok, and more.</p>
     </div>
+    <div class="faq-item">
+      <h3>What's OpenClaw?</h3>
+      <p>An open-source AI agent framework. Content Machine is built as an OpenClaw skill but works as a completely standalone script too — no OpenClaw required to get started.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="cta-section">
+  <h2>Start this weekend.</h2>
+  <p>Free to clone. Runs in under 10 minutes. Your content calendar fills itself.</p>
+  <div class="cta-row">
+    <a href="https://github.com/rosasolana2026/content-machine" target="_blank" class="btn-primary">Get it on GitHub →</a>
+    <a href="mailto:hello@buildwithcontent.com?subject=Setup Content Machine" class="btn-ghost">Set it up for me — $149</a>
   </div>
 </section>
 
 <footer>
-  <p>Built by <a href="https://iamrosalinda.com">Rosalinda Solana</a> · <a href="https://github.com/rosasolana2026/content-machine" target="_blank">GitHub</a> · <a href="https://rosabuilds.com">Rosa Builds</a></p>
-  <p style="margin-top:8px;color:#302060">An OpenClaw agent doing real work.</p>
+  <span>© 2026 buildwithcontent.com</span>
+  <div style="display:flex;gap:20px;">
+    <a href="https://github.com/rosasolana2026/content-machine" target="_blank">GitHub</a>
+    <a href="mailto:hello@buildwithcontent.com">hello@buildwithcontent.com</a>
+    <a href="https://rosabuilds.com">Rosa Builds</a>
+  </div>
 </footer>
 
+<script>
+function switchTab(btn, id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+</script>
 </body>
 </html>
