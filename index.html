@@ -363,6 +363,29 @@
   </div>
 </section>
 
+<section id="contact" style="background:var(--bg2);border-top:1px solid var(--border);">
+  <div class="section-label">Contact</div>
+  <h2>Get in touch</h2>
+  <p class="section-sub">Questions? Want a custom setup? Send us a message.</p>
+  
+  <form id="contact-form" style="max-width:480px;margin:0 auto;padding:0 5%;">
+    <div style="margin-bottom:16px;">
+      <input type="text" id="contact-name" placeholder="Your name" style="width:100%;padding:12px 14px;border:1px solid var(--border2);border-radius:8px;font-size:0.95rem;background:#fff;">
+    </div>
+    <div style="margin-bottom:16px;">
+      <input type="email" id="contact-email" placeholder="Your email" required style="width:100%;padding:12px 14px;border:1px solid var(--border2);border-radius:8px;font-size:0.95rem;background:#fff;">
+    </div>
+    <div style="margin-bottom:16px;">
+      <textarea id="contact-message" placeholder="Your message" required rows="4" style="width:100%;padding:12px 14px;border:1px solid var(--border2);border-radius:8px;font-size:0.95rem;background:#fff;resize:vertical;"></textarea>
+    </div>
+    <button type="submit" class="btn-primary" style="width:100%;border:none;cursor:pointer;">Send Message</button>
+    <p id="contact-status" style="text-align:center;margin-top:12px;font-size:0.85rem;color:var(--muted);"></p>
+    <p id="contact-fallback" style="text-align:center;margin-top:8px;font-size:0.8rem;color:var(--muted);display:none;">
+      Or email <a href="mailto:rosa.solana2026@icloud.com">rosa.solana2026@icloud.com</a> directly
+    </p>
+  </form>
+</section>
+
 <footer>
   <span>© 2026 buildwithcontent.com</span>
   <div style="display:flex;gap:20px;">
@@ -407,6 +430,51 @@ AsciinemaPlayer.create('/demo.cast', document.getElementById('demo-player'), {
       a.href = '/buy'; a.removeAttribute('target'); a.removeAttribute('rel');
     } else {
       a.href = link; a.target = '_blank'; a.rel = 'noopener';
+    }
+  });
+})();
+
+// Contact form handler
+(function() {
+  const form = document.getElementById('contact-form');
+  if (!form) return;
+  
+  const API_URL = 'https://buildwithcontent-api.vercel.app/api/contact';
+  const statusEl = document.getElementById('contact-status');
+  const fallbackEl = document.getElementById('contact-fallback');
+  
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('contact-name').value;
+    const email = document.getElementById('contact-email').value;
+    const message = document.getElementById('contact-message').value;
+    
+    statusEl.textContent = 'Sending...';
+    statusEl.style.color = 'var(--muted)';
+    fallbackEl.style.display = 'none';
+    
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok && data.success) {
+        statusEl.textContent = 'Message sent! We\'ll get back to you soon.';
+        statusEl.style.color = 'var(--green)';
+        form.reset();
+      } else {
+        throw new Error(data.error || 'Failed to send');
+      }
+    } catch (err) {
+      console.error('Contact form error:', err);
+      statusEl.textContent = 'Could not send message. Please try again or email directly.';
+      statusEl.style.color = '#dc2626';
+      fallbackEl.style.display = 'block';
     }
   });
 })();
