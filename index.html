@@ -395,7 +395,16 @@ AsciinemaPlayer.create('/demo.cast', document.getElementById('demo-player'), {
   updateText(document.getElementById('bottom-cta'));
   const inline = document.getElementById('price-inline'); if (inline) inline.textContent = price.replace(/^\$/,'');
   const ctas = ['hero-cta','pricing-cta','bottom-cta','nav-cta'];
-  ctas.forEach(id => { const a = document.getElementById(id); if (a) { a.href = link; a.target = '_blank'; a.rel = 'noopener'; }});
+  const isPlaceholder = !link || /STRIPE_LINK_PLACEHOLDER/.test(link);
+  ctas.forEach(id => {
+    const a = document.getElementById(id);
+    if (!a) return;
+    if (isPlaceholder) {
+      a.href = '/buy'; a.removeAttribute('target'); a.removeAttribute('rel');
+    } else {
+      a.href = link; a.target = '_blank'; a.rel = 'noopener';
+    }
+  });
 })();
 </script>
 </body>

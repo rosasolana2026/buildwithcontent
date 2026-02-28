@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buy — BuildWithContent Starter</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    :root { --text:#1f2937; --muted:#6b7280; --border:rgba(0,0,0,.1); --accent:#111827; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif; background: #f8f5ef; color: var(--text); margin: 0; }
+    .wrap { max-width: 720px; margin: 80px auto; background: #fff; border:1px solid var(--border); border-radius: 14px; padding: 28px; box-shadow: 0 16px 60px rgba(17,24,39,0.06); }
+    h1 { font-weight: 800; letter-spacing: -0.01em; margin: 0 0 12px; }
+    p { color: var(--muted); line-height: 1.7; }
+    .btn { display:inline-block; margin-top: 16px; background: var(--accent); color:#fff; padding:12px 18px; border-radius:10px; font-weight:800; text-decoration:none; }
+    .note { font-size: 0.9rem; color: var(--muted); margin-top: 12px; }
+    code { background: #f3f4f6; padding: 2px 6px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Redirecting you to checkout…</h1>
+    <p>If nothing happens in a second, click the button below.</p>
+    <a id="btn" class="btn" href="#">Open Checkout</a>
+    <p class="note">Admin note: set your Stripe Payment Link in both files:
+      <br>1) <code>index.html</code> → <code>data-stripe-link</code>
+      <br>2) <code>buy.html</code> → replace <code>STRIPE_LINK_PLACEHOLDER</code> in the script
+    </p>
+  </div>
+
+  <script>
+    var STRIPE_LINK = 'STRIPE_LINK_PLACEHOLDER';
+    var btn = document.getElementById('btn');
+    if (/^https?:\/\//.test(STRIPE_LINK)) {
+      btn.href = STRIPE_LINK; btn.target = '_blank'; btn.rel = 'noopener';
+      try { window.location.replace(STRIPE_LINK); } catch (e) {}
+    } else {
+      btn.textContent = 'Email us to purchase';
+      btn.href = 'mailto:hello@buildwithcontent.com?subject=BuildWithContent%20Starter%20Purchase';
+      btn.removeAttribute('target');
+    }
+  </script>
+</body>
+</html>
