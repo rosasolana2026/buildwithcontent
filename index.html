@@ -389,11 +389,14 @@ AsciinemaPlayer.create('/demo.cast', document.getElementById('demo-player'), {
   const html = document.documentElement;
   const price = html.getAttribute('data-price') || 'PRICE_PLACEHOLDER';
   const link = html.getAttribute('data-stripe-link') || 'STRIPE_LINK_PLACEHOLDER';
-  const updateText = (el) => { if (!el) return; el.textContent = `Get it for ${price}`; };
+  const isPricePH = !price || /PRICE_PLACEHOLDER/.test(price);
+  const label = isPricePH ? 'Get it now' : `Get it for ${price}`;
+  const updateText = (el) => { if (!el) return; el.textContent = label; };
   updateText(document.getElementById('hero-cta'));
   updateText(document.getElementById('pricing-cta'));
   updateText(document.getElementById('bottom-cta'));
-  const inline = document.getElementById('price-inline'); if (inline) inline.textContent = price.replace(/^\$/,'');
+  const inline = document.getElementById('price-inline');
+  if (inline) inline.textContent = isPricePH ? '' : price.replace(/^\$/,'');
   const ctas = ['hero-cta','pricing-cta','bottom-cta','nav-cta'];
   const isPlaceholder = !link || /STRIPE_LINK_PLACEHOLDER/.test(link);
   ctas.forEach(id => {
